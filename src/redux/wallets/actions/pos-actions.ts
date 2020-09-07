@@ -263,7 +263,7 @@ export const posAction = (
                 amount: blockchainInstance.account
                     .amountToStd(amount, tokenConfig.decimals)
                     .toFixed(),
-                token,
+                token: tokenConfig,
                 feeOptions: feeOptions
                     ? {
                           gasPrice: feeOptions.gasPrice.toString(),

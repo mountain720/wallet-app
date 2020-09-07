@@ -49,13 +49,11 @@ export class EthereumTransactionUtils extends AbstractBlockchainTransactionUtils
     public async buildTransferTransaction(
         tx: ITransferTransaction
     ): Promise<IBlockchainTransaction> {
-        const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
         const client = Ethereum.getClient(tx.chainId);
         const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
         const blockInfo = await client.getCurrentBlock();
 
-        switch (tokenConfig.type) {
+        switch (tx.token.type) {
             case TokenType.ERC20:
                 return {
                     date: {
@@ -67,10 +65,10 @@ export class EthereumTransactionUtils extends AbstractBlockchainTransactionUtils
                     blockchain: tx.account.blockchain,
                     chainId: tx.chainId,
                     type: TransactionType.TRANSFER,
-                    token: tokenConfig,
+                    token: tx.token,
                     address: tx.account.address,
                     publicKey: tx.account.publicKey,
-                    toAddress: tokenConfig.contractAddress,
+                    toAddress: tx.token.contractAddress,
                     amount: '0',
                     feeOptions: tx.feeOptions,
                     broadcastedOnBlock: blockInfo?.number,
@@ -100,7 +98,7 @@ export class EthereumTransactionUtils extends AbstractBlockchainTransactionUtils
                     blockchain: tx.account.blockchain,
                     chainId: tx.chainId,
                     type: TransactionType.TRANSFER,
-                    token: tokenConfig,
+                    token: tx.token,
                     address: tx.account.address,
                     publicKey: tx.account.publicKey,
 

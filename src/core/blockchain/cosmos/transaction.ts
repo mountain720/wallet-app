@@ -12,7 +12,6 @@ import { Client as CosmosClient } from './client';
 import { Cosmos } from '.';
 import { BigNumber } from 'bignumber.js';
 import { sortObject } from '../../utils/sort-object';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
 
 export class CosmosTransactionUtils extends AbstractBlockchainTransactionUtils {
     public async sign(tx: IBlockchainTransaction, privateKey: string): Promise<any> {
@@ -93,8 +92,6 @@ export class CosmosTransactionUtils extends AbstractBlockchainTransactionUtils {
             sequence: accountInfo.sequence
         };
 
-        const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
         return {
             date: {
                 created: Date.now(),
@@ -105,7 +102,7 @@ export class CosmosTransactionUtils extends AbstractBlockchainTransactionUtils {
             blockchain: tx.account.blockchain,
             chainId: tx.chainId,
             type: TransactionType.TRANSFER,
-            token: tokenConfig,
+            token: tx.token,
             address: tx.account.address,
             publicKey: tx.account.publicKey,
             toAddress: tx.toAddress,

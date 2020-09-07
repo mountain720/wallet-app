@@ -567,7 +567,7 @@ export const sendTransferTransaction = (
             account,
             toAddress,
             amount: blockchainInstance.account.amountToStd(amount, tokenConfig.decimals).toFixed(),
-            token,
+            token: tokenConfig,
             feeOptions: {
                 gasPrice: feeOptions.gasPrice.toString(),
                 gasLimit: feeOptions.gasLimit.toString()

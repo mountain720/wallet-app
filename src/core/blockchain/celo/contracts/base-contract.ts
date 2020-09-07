@@ -1,6 +1,5 @@
 import { ChainIdType, IPosTransaction, IBlockchainTransaction, TransactionType } from '../../types';
 import { Contracts } from '../config';
-import { getTokenConfig } from '../../../../redux/tokens/static-selectors';
 import { Celo } from '..';
 import { TransactionStatus } from '../../../wallet/types';
 
@@ -39,8 +38,6 @@ export const getContract = async (
 export const buildBaseTransaction = async (
     tx: IPosTransaction
 ): Promise<IBlockchainTransaction> => {
-    const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
     const client = Celo.getClient(tx.chainId);
     const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
     const blockInfo = await client.getCurrentBlock();
@@ -55,7 +52,7 @@ export const buildBaseTransaction = async (
         blockchain: tx.account.blockchain,
         chainId: tx.chainId,
         type: TransactionType.CONTRACT_CALL,
-        token: tokenConfig,
+        token: tx.token,
         address: tx.account.address,
         publicKey: tx.account.publicKey,
         toAddress: '',

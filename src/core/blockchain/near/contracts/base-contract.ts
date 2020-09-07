@@ -1,4 +1,3 @@
-import { getTokenConfig } from '../../../../redux/tokens/static-selectors';
 import { Near } from '..';
 import { TransactionStatus } from '../../../wallet/types';
 import { IPosTransaction, IBlockchainTransaction, TransactionType } from '../../types';
@@ -6,8 +5,6 @@ import { IPosTransaction, IBlockchainTransaction, TransactionType } from '../../
 export const buildBaseTransaction = async (
     tx: IPosTransaction
 ): Promise<IBlockchainTransaction> => {
-    const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
     const client = Near.getClient(tx.chainId);
 
     const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
@@ -23,7 +20,7 @@ export const buildBaseTransaction = async (
         blockchain: tx.account.blockchain,
         chainId: tx.chainId,
         type: TransactionType.CONTRACT_CALL,
-        token: tokenConfig,
+        token: tx.token,
         address: tx.account.address,
         publicKey: tx.account.publicKey,
         toAddress: '',

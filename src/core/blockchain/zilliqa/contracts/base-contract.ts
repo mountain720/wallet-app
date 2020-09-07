@@ -1,7 +1,5 @@
 import { ChainIdType, IPosTransaction, IBlockchainTransaction, TransactionType } from '../../types';
 
-import { getTokenConfig } from '../../../../redux/tokens/static-selectors';
-
 import { TransactionStatus } from '../../../wallet/types';
 import { Contracts } from '../config';
 import { Zilliqa } from '..';
@@ -44,8 +42,6 @@ export const getContract = async (
 export const buildBaseTransaction = async (
     tx: IPosTransaction
 ): Promise<IBlockchainTransaction> => {
-    const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
     const client = Zilliqa.getClient(tx.chainId);
     const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
     const blockInfo = await client.getCurrentBlock();
@@ -60,7 +56,7 @@ export const buildBaseTransaction = async (
         blockchain: tx.account.blockchain,
         chainId: tx.chainId,
         type: TransactionType.CONTRACT_CALL,
-        token: tokenConfig,
+        token: tx.token,
         address: tx.account.address,
         publicKey: tx.account.publicKey,
         toAddress: '',

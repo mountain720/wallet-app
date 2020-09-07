@@ -41,7 +41,7 @@ export interface IBlockchainTransaction<IAdditionalInfoType = any> {
     blockchain: Blockchain;
     chainId: ChainIdType;
     type: TransactionType;
-    token?: ITokenConfigState;
+    token: ITokenConfigState;
     address: string;
     publicKey: string;
     toAddress: string;
@@ -82,7 +82,7 @@ export interface IPosTransaction {
     chainId: ChainIdType;
     validators: IValidator[];
     amount: string;
-    token: string;
+    token: ITokenConfigState;
     feeOptions: IFeeOptions;
     extraFields?: ITransactionExtraFields;
 }
@@ -92,7 +92,7 @@ export interface ITransferTransaction {
     chainId: ChainIdType;
     toAddress: string;
     amount: string;
-    token: string;
+    token: ITokenConfigState;
     //  nonce: number;
     feeOptions: IFeeOptions;
     //  currentBlockHash: string;

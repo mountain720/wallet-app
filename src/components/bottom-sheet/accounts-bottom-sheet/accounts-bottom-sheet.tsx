@@ -162,7 +162,12 @@ export class AccountsBottomSheetComponent extends React.Component<
 
                         const balance =
                             selectedAccount &&
-                            calculateBalance(account, this.props.chainId, this.props.exchangeRates);
+                            calculateBalance(
+                                account,
+                                this.props.chainId,
+                                tokenConfig,
+                                this.props.exchangeRates
+                            );
 
                         const swipeIndex = `account-${index}`;
 

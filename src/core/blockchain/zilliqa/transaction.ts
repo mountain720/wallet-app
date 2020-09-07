@@ -173,10 +173,9 @@ export class ZilliqaTransactionUtils extends AbstractBlockchainTransactionUtils 
         const client = Zilliqa.getClient(tx.chainId);
         const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
 
-        const tokenInfo = getTokenConfig(tx.account.blockchain, tx.token);
         const blockInfo = await client.getCurrentBlock();
 
-        switch (tokenInfo.type) {
+        switch (tx.token.type) {
             case TokenType.ZRC2:
                 return {
                     date: {
@@ -188,11 +187,11 @@ export class ZilliqaTransactionUtils extends AbstractBlockchainTransactionUtils 
                     blockchain: tx.account.blockchain,
                     chainId: tx.chainId,
                     type: TransactionType.TRANSFER,
-                    token: tokenInfo,
+                    token: tx.token,
                     address: tx.account.address,
                     publicKey: tx.account.publicKey,
 
-                    toAddress: tokenInfo.contractAddress,
+                    toAddress: tx.token.contractAddress,
 
                     amount: '0',
                     feeOptions: tx.feeOptions,
@@ -233,7 +232,7 @@ export class ZilliqaTransactionUtils extends AbstractBlockchainTransactionUtils 
                     blockchain: tx.account.blockchain,
                     chainId: tx.chainId,
                     type: TransactionType.TRANSFER,
-                    token: tokenInfo,
+                    token: tx.token,
 
                     address: tx.account.address,
                     publicKey: tx.account.publicKey,

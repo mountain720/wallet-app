@@ -5,24 +5,24 @@ import BigNumber from 'bignumber.js';
 import { getBlockchain } from '../blockchain/blockchain-factory';
 import { Blockchain, ChainIdType } from '../blockchain/types';
 import { IExchangeRates } from '../../redux/market/state';
-import { getTokenConfig } from '../../redux/tokens/static-selectors';
+import { ITokenConfigState } from '../../redux/tokens/state';
 
 export const calculateBalance = (
     account: IAccountState,
     chainId: ChainIdType,
+    token: ITokenConfigState,
     exchangeRates: IExchangeRates
 ) => {
     const tokenKeys = Object.keys((account?.tokens || {})[chainId] || {});
     let balance = new BigNumber(0);
 
     tokenKeys.map(key => {
-        const token = account.tokens[chainId][key];
-        const tokenConfig = getTokenConfig(account.blockchain, token.symbol);
+        const tokenState = account.tokens[chainId][key];
 
-        const tokenBalanceValue = new BigNumber(token.balance?.value);
+        const tokenBalanceValue = new BigNumber(tokenState.balance?.value);
 
-        if (tokenConfig && token.active) {
-            if (tokenConfig.removable === false) {
+        if (tokenState && tokenState.active) {
+            if (token.removable === false) {
                 balance = balance.plus(tokenBalanceValue);
             } else {
                 const amount = convertAmount(
@@ -30,8 +30,8 @@ export const calculateBalance = (
                     exchangeRates,
                     tokenBalanceValue.toString(),
                     key,
-                    tokenConfig.symbol,
-                    tokenConfig.decimals
+                    token.symbol,
+                    token.decimals
                 );
                 balance = balance.plus(amount);
             }

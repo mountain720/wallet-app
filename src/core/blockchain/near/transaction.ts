@@ -17,7 +17,6 @@ import { KeyPair, PublicKey } from 'near-api-js/lib/utils/key_pair';
 import { base_decode } from 'near-api-js/lib/utils/serialize';
 import BN from 'bn.js';
 import sha256 from 'js-sha256';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
 import { PosBasicActionType } from '../types/token';
 import { Client as NearClient } from './client';
 import cloneDeep from 'lodash/cloneDeep';
@@ -83,8 +82,6 @@ export class NearTransactionUtils extends AbstractBlockchainTransactionUtils {
         const nonce = await client.getNonce(tx.account.address, tx.account.publicKey);
         const blockInfo = await client.getCurrentBlock();
 
-        const tokenConfig = getTokenConfig(tx.account.blockchain, tx.token);
-
         return {
             date: {
                 created: Date.now(),
@@ -95,7 +92,7 @@ export class NearTransactionUtils extends AbstractBlockchainTransactionUtils {
             blockchain: tx.account.blockchain,
             chainId: tx.chainId,
             type: TransactionType.TRANSFER,
-            token: tokenConfig,
+            token: tx.token,
 
             address: tx.account.address,
             publicKey: tx.account.publicKey,
