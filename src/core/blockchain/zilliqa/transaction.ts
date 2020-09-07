@@ -14,7 +14,6 @@ import { toChecksumAddress } from '@zilliqa-js/crypto/dist/util';
 import { TransactionStatus } from '../../wallet/types';
 import { TokenType, PosBasicActionType } from '../types/token';
 import { Zilliqa } from '.';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
 import { Contracts } from './config';
 import BigNumber from 'bignumber.js';
 import { cloneDeep } from 'lodash';
@@ -250,8 +249,7 @@ export class ZilliqaTransactionUtils extends AbstractBlockchainTransactionUtils 
     }
 
     public getTransactionAmount(tx: IBlockchainTransaction): string {
-        const tokenInfo = getTokenConfig(tx.blockchain, tx.token?.symbol);
-        if (tokenInfo.type === TokenType.ZRC2) {
+        if (tx.token.type === TokenType.ZRC2) {
             return tx?.data?.params[1];
         } else {
             return tx.amount;

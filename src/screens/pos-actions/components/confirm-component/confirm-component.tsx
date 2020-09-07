@@ -98,7 +98,7 @@ export class ConfirmComponentComponent extends React.Component<
                     tokenConfig={tokenConfig}
                     stdAmount={getInputAmountToStd(
                         this.props.account,
-                        this.props.token,
+                        tokenConfig,
                         this.props.amount
                     )}
                     account={this.props.account}

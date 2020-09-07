@@ -33,6 +33,9 @@ export const EnterAmountComponent = (
         onChange(addedAmount.toFixed());
     };
 
+    const { blockchain } = this.props.account;
+    const tokenConfig = getTokenConfig(blockchain, this.props.token.symbol);
+
     return (
         <View style={styles.container}>
             <Text style={styles.receipientLabel}>
@@ -71,7 +74,7 @@ export const EnterAmountComponent = (
                         }
                         amount={getInputAmountToStd(
                             props.account,
-                            props.token,
+                            tokenConfig,
                             availableAmount
                         ).toString()}
                         blockchain={props.account.blockchain}

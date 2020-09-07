@@ -10,7 +10,6 @@ import BigNumber from 'bignumber.js';
 import { TokenType } from '../types/token';
 import { TransactionStatus } from '../../wallet/types';
 import { Ethereum } from '.';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
 
 export class EthereumTransactionUtils extends AbstractBlockchainTransactionUtils {
     public async sign(tx: IBlockchainTransaction, privateKey: string): Promise<string> {
@@ -113,11 +112,10 @@ export class EthereumTransactionUtils extends AbstractBlockchainTransactionUtils
     }
 
     public getTransactionAmount(tx: IBlockchainTransaction): string {
-        const tokenInfo = getTokenConfig(tx?.blockchain, tx?.token?.symbol);
-        if (tokenInfo?.type === TokenType.ERC20) {
-            return tx?.data?.params[1];
+        if (tx.token.type === TokenType.ERC20) {
+            return tx.data?.params[1];
         } else {
-            return tx?.amount;
+            return tx.amount;
         }
     }
 }

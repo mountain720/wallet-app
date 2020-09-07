@@ -1,17 +1,16 @@
-import { getTokenConfig } from '../../redux/tokens/static-selectors';
 import BigNumber from 'bignumber.js';
 import { TokenType } from '../blockchain/types/token';
 import { getBlockchain } from '../blockchain/blockchain-factory';
-import { IAccountState, ITokenState } from '../../redux/wallets/state';
+import { IAccountState } from '../../redux/wallets/state';
 import { ChainIdType, IFeeOptions } from '../blockchain/types';
+import { ITokenConfigState } from '../../redux/tokens/state';
 
 export const getInputAmountToStd = (
     account: IAccountState,
-    token: ITokenState,
+    tokenConfig: ITokenConfigState,
     amount: string
 ): BigNumber => {
     const blockchainInstance = getBlockchain(account.blockchain);
-    const tokenConfig = getTokenConfig(account.blockchain, token.symbol);
 
     return blockchainInstance.account.amountToStd(new BigNumber(amount || 0), tokenConfig.decimals);
 };
@@ -19,23 +18,22 @@ export const getInputAmountToStd = (
 export const availableFunds = (
     amount: string,
     account: IAccountState,
-    token: ITokenState,
+    tokenBalance: string,
+    tokenConfig: ITokenConfigState,
     chainId: ChainIdType,
     feeOptions: IFeeOptions,
     balanceAvailable?: string
 ): { insufficientFunds: boolean; insufficientFundsFees: boolean } => {
-    const tokenConfig = getTokenConfig(account.blockchain, token.symbol);
-
     const result = {
         insufficientFunds: false,
         insufficientFundsFees: false
     };
 
     // Amount check
-    const inputAmount = getInputAmountToStd(account, token, amount);
+    const inputAmount = getInputAmountToStd(account, tokenConfig, amount);
     const availableBalanceValue = balanceAvailable
-        ? getInputAmountToStd(account, token, balanceAvailable)
-        : new BigNumber(token.balance?.value);
+        ? getInputAmountToStd(account, tokenConfig, balanceAvailable)
+        : new BigNumber(tokenBalance);
 
     // Amount > available amount
     result.insufficientFunds = inputAmount.isGreaterThan(availableBalanceValue);
@@ -67,15 +65,14 @@ export const availableFunds = (
 
 export const availableAmount = (
     account: IAccountState,
-    token: ITokenState,
+    tokenBalance: string,
+    tokenConfig: ITokenConfigState,
     feeOptions?: IFeeOptions,
     balanceAvailable?: string
 ): string => {
-    const tokenConfig = getTokenConfig(account.blockchain, token.symbol);
-
     let balance: BigNumber = balanceAvailable
-        ? getInputAmountToStd(account, token, balanceAvailable)
-        : new BigNumber(token.balance?.value);
+        ? getInputAmountToStd(account, tokenConfig, balanceAvailable)
+        : new BigNumber(tokenBalance);
     if (feeOptions) {
         if (tokenConfig.type === TokenType.NATIVE) {
             balance = balance.minus(feeOptions?.feeTotal);

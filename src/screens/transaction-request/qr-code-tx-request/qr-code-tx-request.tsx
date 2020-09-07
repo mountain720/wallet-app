@@ -481,12 +481,15 @@ export class QRCodeTransferRequestComponent extends React.Component<
 
     @bind
     private onFeesChanged(feeOptions: IFeeOptions) {
+        const { blockchain } = this.props.selectedAccount;
+        const tokenConfig = getTokenConfig(blockchain, this.state.token.symbol);
         this.setState({ feeOptions }, () => {
             if (this.state.token) {
                 const { insufficientFunds, insufficientFundsFees } = availableFunds(
                     this.state.amount,
                     this.props.selectedAccount,
-                    this.state.token,
+                    this.state.token.balance?.value,
+                    tokenConfig,
                     this.state.chainId,
                     feeOptions
                 );
@@ -499,12 +502,15 @@ export class QRCodeTransferRequestComponent extends React.Component<
     @bind
     private addAmount(value: string) {
         const amount = value.replace(/,/g, '.');
+        const { blockchain } = this.props.selectedAccount;
+        const tokenConfig = getTokenConfig(blockchain, this.state.token.symbol);
         this.setState({ amount }, () => {
             if (this.state.token) {
                 const { insufficientFunds, insufficientFundsFees } = availableFunds(
                     amount,
                     this.props.selectedAccount,
-                    this.state.token,
+                    this.state.token.balance?.value,
+                    tokenConfig,
                     this.state.chainId,
                     this.state.feeOptions
                 );

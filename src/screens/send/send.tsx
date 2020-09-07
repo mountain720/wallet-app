@@ -267,11 +267,14 @@ export class SendScreenComponent extends React.Component<
     }
 
     public onFeesChanged(feeOptions: IFeeOptions) {
+        const { blockchain } = this.props.account;
+        const tokenConfig = getTokenConfig(blockchain, this.props.token.symbol);
         this.setState({ feeOptions }, () => {
             const { insufficientFunds, insufficientFundsFees } = availableFunds(
                 this.state.amount,
                 this.props.account,
-                this.props.token,
+                this.props.token.balance?.value,
+                tokenConfig,
                 this.props.chainId,
                 feeOptions
             );
@@ -286,11 +289,14 @@ export class SendScreenComponent extends React.Component<
 
     public addAmount(value: string) {
         const amount = value.replace(/,/g, '.');
+        const { blockchain } = this.props.account;
+        const tokenConfig = getTokenConfig(blockchain, this.props.token.symbol);
         this.setState({ amount }, () => {
             const { insufficientFunds, insufficientFundsFees } = availableFunds(
                 amount,
                 this.props.account,
-                this.props.token,
+                this.props.token.balance?.value,
+                tokenConfig,
                 this.props.chainId,
                 this.state.feeOptions
             );
@@ -382,7 +388,7 @@ export class SendScreenComponent extends React.Component<
                         tokenConfig={tokenConfig}
                         stdAmount={getInputAmountToStd(
                             this.props.account,
-                            this.props.token,
+                            tokenConfig,
                             this.state.amount
                         )}
                         account={this.props.account}
@@ -394,13 +400,14 @@ export class SendScreenComponent extends React.Component<
 
     private renderEnterAmount() {
         const config = getBlockchain(this.props.account.blockchain).config;
-
+        const tokenConfig = getTokenConfig(this.props.account.blockchain, this.props.token.symbol);
         return (
             <View key="enterAmount" style={this.props.styles.amountContainer}>
                 <EnterAmount
                     availableAmount={availableAmount(
                         this.props.account,
-                        this.props.token,
+                        this.props.token.balance?.value,
+                        tokenConfig,
                         this.state.feeOptions
                     )}
                     value={this.state.amount}

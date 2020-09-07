@@ -215,7 +215,7 @@ export class PosBasicActionComponent extends React.Component<
                     tokenConfig={tokenConfig}
                     stdAmount={getInputAmountToStd(
                         this.props.account,
-                        this.props.token,
+                        tokenConfig,
                         this.state.amount
                     )}
                     account={this.props.account}
@@ -225,11 +225,14 @@ export class PosBasicActionComponent extends React.Component<
     }
 
     public onFeesChanged(feeOptions: IFeeOptions) {
+        const { blockchain } = this.props.account;
+        const tokenConfig = getTokenConfig(blockchain, this.props.token.symbol);
         this.setState({ feeOptions }, () => {
             const { insufficientFunds, insufficientFundsFees } = availableFunds(
                 this.state.amount,
                 this.props.account,
-                this.props.token,
+                this.props.token.balance?.value,
+                tokenConfig,
                 this.props.chainId,
                 feeOptions,
                 this.props.validators[0].totalVotes
@@ -240,12 +243,15 @@ export class PosBasicActionComponent extends React.Component<
     }
 
     public addAmount(value: string) {
+        const { blockchain } = this.props.account;
+        const tokenConfig = getTokenConfig(blockchain, this.props.token.symbol);
         const amount = value.replace(/,/g, '.');
         this.setState({ amount }, () => {
             const { insufficientFunds, insufficientFundsFees } = availableFunds(
                 amount,
                 this.props.account,
-                this.props.token,
+                this.props.token.balance?.value,
+                tokenConfig,
                 this.props.chainId,
                 this.state.feeOptions,
                 this.props.validators[0].totalVotes
@@ -278,7 +284,8 @@ export class PosBasicActionComponent extends React.Component<
                 <EnterAmount
                     availableAmount={availableAmount(
                         this.props.account,
-                        this.props.token,
+                        this.props.token.balance?.value,
+                        tokenConfig,
                         this.state.feeOptions,
                         activeBalance
                     )}
