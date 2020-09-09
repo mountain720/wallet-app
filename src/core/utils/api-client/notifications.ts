@@ -1,15 +1,9 @@
 import { captureException as SentryCaptureException } from '@sentry/react-native';
 import { getWalletCredentialsKey } from '../../secure/keychain/keychain';
-import {
-    getCurrentTimestampNTP,
-    getWalletApiDomain,
-    getSignature,
-    removeDuplicateObjectsFromArray
-} from './utils';
+import { getCurrentTimestampNTP, getWalletApiDomain, getSignature } from './utils';
 import { PushNotifTokenType } from '../../messaging/types';
 import { Notifications } from '../../messaging/notifications/notifications';
-import { IAccountState, IWalletState } from '../../../redux/wallets/state';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
+import { IWalletState } from '../../../redux/wallets/state';
 import { ApiClient } from './api-client';
 import { Blockchain } from '../../blockchain/types';
 
@@ -107,42 +101,23 @@ export class NotificationsApiClient {
      * @param wallet
      * @param deviceId
      */
-    public async registerNotificationSettings(wallet: IWalletState, deviceId: string) {
+    public async registerNotificationSettings(
+        wallet: IWalletState,
+        accounts: any,
+        deviceId: string
+    ) {
         try {
             const walletPublicKey = wallet.walletPublicKey;
             const walletPrivateKey = await getWalletCredentialsKey(walletPublicKey);
 
             if (walletPrivateKey) {
-                const myAccounts = [];
-
-                wallet.accounts.map(async (account: IAccountState) => {
-                    const myTokens = [];
-
-                    for (const chainId of Object.keys(account.tokens)) {
-                        for (const symbol of Object.keys(account.tokens[chainId])) {
-                            const tokenConfig = getTokenConfig(account.blockchain, symbol);
-
-                            myTokens.push({
-                                symbol,
-                                contractAddress: tokenConfig?.contractAddress
-                            });
-                        }
-                    }
-
-                    myAccounts.push({
-                        blockchain: account.blockchain,
-                        address: account.address.toLocaleLowerCase(),
-                        tokens: removeDuplicateObjectsFromArray(myTokens)
-                    });
-                });
-
                 const data: any = {
                     walletPublicKey,
                     timestamp: await getCurrentTimestampNTP(),
                     domain: getWalletApiDomain(),
 
                     deviceId,
-                    accounts: myAccounts
+                    accounts
                 };
 
                 const signature = getSignature(data, walletPrivateKey, walletPublicKey);

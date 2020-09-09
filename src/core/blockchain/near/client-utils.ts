@@ -2,7 +2,7 @@ import { IClientUtils } from '../types/client-utils';
 import { Client } from './client';
 import { Blockchain, TransactionType, IBlockchainTransaction } from '../types';
 import { Near } from '.';
-import { getTokenConfig } from '../../../redux/tokens/static-selectors';
+import { NEAR_NATIVE } from './config';
 
 export class ClientUtils implements IClientUtils {
     constructor(private client: Client) {}
@@ -62,7 +62,7 @@ export class ClientUtils implements IClientUtils {
             broadcastedOnBlock: undefined, // TODO
             nonce: txInfo.nonce,
             status: Near.transaction.getTransactionStatusByCode(txStatus),
-            token: getTokenConfig(Blockchain.NEAR, 'NEAR')
+            token: NEAR_NATIVE // TODO find a fix for token config if needed
         };
     }
 }

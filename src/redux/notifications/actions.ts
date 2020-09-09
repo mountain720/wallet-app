@@ -5,6 +5,9 @@ import { ApiClient } from '../../core/utils/api-client/api-client';
 import { getChainId } from '../preferences/selectors';
 import { Blockchain } from '../../core/blockchain/types';
 import { LoadingModal } from '../../components/loading-modal/loading-modal';
+import { IAccountState } from '../wallets/state';
+import { getTokenConfig } from '../tokens/static-selectors';
+import { removeDuplicateObjectsFromArray } from '../../core/utils/api-client/utils';
 
 export const SET_UNSEEN_NOTIFICATIONS = 'SET_UNSEEN_NOTIFICATIONS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
@@ -108,8 +111,31 @@ export const registerNotificationSettings = () => async (
     const apiClient = new ApiClient();
 
     for (const wallet of Object.values(state.wallets)) {
+        const myAccounts = [];
+        wallet.accounts.map(async (account: IAccountState) => {
+            const myTokens = [];
+
+            for (const chainId of Object.keys(account.tokens)) {
+                for (const symbol of Object.keys(account.tokens[chainId])) {
+                    const tokenConfig = getTokenConfig(account.blockchain, symbol);
+
+                    myTokens.push({
+                        symbol,
+                        contractAddress: tokenConfig?.contractAddress
+                    });
+                }
+            }
+
+            myAccounts.push({
+                blockchain: account.blockchain,
+                address: account.address.toLocaleLowerCase(),
+                tokens: removeDuplicateObjectsFromArray(myTokens)
+            });
+        });
+
         await apiClient.notifications.registerNotificationSettings(
             wallet,
+            myAccounts,
             state.preferences.deviceId
         );
     }
