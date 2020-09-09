@@ -40,7 +40,7 @@ export const mapStateToProps = (state: IReduxState) => {
         isVisible: state.ui.processTransactions.isVisible,
         transactions: state.ui.processTransactions.data.txs,
         walletType: getSelectedWallet(state)?.type,
-        accountTransactions: getSelectedAccountTransactions(state)
+        accountTransactions: getSelectedAccountTransactions(state) || []
     };
 };
 
@@ -169,11 +169,6 @@ export class ProcessTransactionsComponent extends React.Component<
             }
             case PosBasicActionType.ACTIVATE: {
                 topText = translate('Validator.activatingVotes');
-                break;
-            }
-            case PosBasicActionType.DEPOSIT: {
-                topText = translate('App.labels.deposit') + ' ' + amount;
-                middleText = translate('App.labels.to').toLowerCase() + ' ' + tx.toAddress;
                 break;
             }
             case PosBasicActionType.WITHDRAW: {
@@ -311,7 +306,7 @@ export class ProcessTransactionsComponent extends React.Component<
                             this.props.closeProcessTransactions();
                         }}
                         wrapperStyle={styles.continueButton}
-                        disabled={this.state.disabledButton}
+                        disabled={this.props.transactions.length === 0 || this.state.disabledButton}
                     >
                         {translate('App.labels.continue')}
                     </Button>
