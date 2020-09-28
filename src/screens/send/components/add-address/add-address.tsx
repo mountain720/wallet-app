@@ -166,7 +166,6 @@ export class AddAddressComponent extends React.Component<
             const response = await blockchainInstance
                 .getClient(this.props.chainId)
                 .nameService.resolveText(text);
-            this.setState({ resolvedAddress: response.address });
             switch (response.code) {
                 case ResolveTextCode.OK: {
                     if (response.type === ResolveTextType.ADDRESS) {
@@ -184,7 +183,8 @@ export class AddAddressComponent extends React.Component<
                             {
                                 isValidText: false, // because on ResolveTextType.NAME, toAddress TextInput must be editable
                                 errorResponseText: undefined,
-                                warningResponseText: undefined
+                                warningResponseText: undefined,
+                                resolvedAddress: response.address
                             },
                             () => this.props.onChange(response.address, this.state.toAddress)
                         );
