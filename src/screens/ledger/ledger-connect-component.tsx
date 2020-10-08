@@ -278,7 +278,6 @@ export class LedgerConnectComponent extends React.Component<
                 toValue: 0,
                 duration: ANIMATION_TIME,
                 useNativeDriver: true
-                // easing: Easing.out(Easing.exp)
             }),
             Animated.timing(this.state.stepContainerTranslateAnimation, {
                 toValue: -300,
