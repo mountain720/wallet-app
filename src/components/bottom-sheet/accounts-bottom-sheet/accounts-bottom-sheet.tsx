@@ -28,9 +28,10 @@ import { ChainIdType, Blockchain } from '../../../core/blockchain/types';
 import { IconValues } from '../../icon/values';
 import { NavigationService } from '../../../navigation/navigation-service';
 import Icon from '../../icon/icon';
-import { normalize } from '../../../styles/dimensions';
+import { BORDER_RADIUS, normalize } from '../../../styles/dimensions';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Dialog } from '../../dialog/dialog';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 interface IExternalProps {
     snapPoints: { initialSnap: number; bottomSheetHeight: number };
@@ -80,7 +81,9 @@ export class AccountsBottomSheetComponent extends React.Component<
     }
 
     public componentDidMount() {
-        Platform.OS !== 'web' && this.bottomSheet.current.snapTo(1);
+        // Platform.OS !== 'web' && this.bottomSheet.current.snapTo(1);
+        this.bottomSheet.open();
+
         this.props.accounts.map(acc => {
             this.props.getBalance(acc.blockchain, acc.address, undefined, false);
         });
@@ -158,14 +161,14 @@ export class AccountsBottomSheetComponent extends React.Component<
         return (
             <View
                 style={[
-                    this.props.styles.container,
-                    { height: this.props.snapPoints.bottomSheetHeight }
+                    this.props.styles.container
+                    // { height: this.props.snapPoints.bottomSheetHeight }
                 ]}
             >
                 <ScrollView
                     contentContainerStyle={[
-                        this.props.styles.scrollContainer,
-                        { height: this.props.snapPoints.bottomSheetHeight }
+                        this.props.styles.scrollContainer
+                        // { height: this.props.snapPoints.bottomSheetHeight }
                     ]}
                     showsVerticalScrollIndicator={false}
                     scrollEnabled={Platform.OS === 'web'}
@@ -289,25 +292,51 @@ export class AccountsBottomSheetComponent extends React.Component<
     }
 
     public render() {
+        const { theme } = this.props;
+
+        if (Platform.OS === 'web') {
+            return (
+                <BottomSheet
+                    ref={this.bottomSheet}
+                    initialSnap={0}
+                    snapPoints={[
+                        this.props.snapPoints.initialSnap,
+                        this.props.snapPoints.bottomSheetHeight
+                    ]}
+                    renderContent={() => this.renderBottomSheetContent()}
+                    renderHeader={() => (
+                        <BottomSheetHeader
+                            obRef={this.bottomSheet}
+                            onClose={() => this.props.onClose()}
+                        />
+                    )}
+                    enabledInnerScrolling={false}
+                    enabledContentTapInteraction={false}
+                    onCloseEnd={() => this.props.onClose()}
+                />
+            );
+        }
+
         return (
-            <BottomSheet
-                ref={this.bottomSheet}
-                initialSnap={0}
-                snapPoints={[
-                    this.props.snapPoints.initialSnap,
-                    this.props.snapPoints.bottomSheetHeight
-                ]}
-                renderContent={() => this.renderBottomSheetContent()}
-                renderHeader={() => (
-                    <BottomSheetHeader
-                        obRef={this.bottomSheet}
-                        onClose={() => this.props.onClose()}
-                    />
-                )}
-                enabledInnerScrolling={false}
-                enabledContentTapInteraction={false}
-                onCloseEnd={() => this.props.onClose()}
-            />
+            <RBSheet
+                ref={ref => (this.bottomSheet = ref)}
+                closeOnDragDown={true}
+                animationType="slide"
+                openDuration={500}
+                customStyles={{
+                    wrapper: { flexGrow: 1, backgroundColor: 'transparent' },
+                    container: {
+                        height: 'auto',
+                        borderTopRightRadius: BORDER_RADIUS * 3,
+                        borderTopLeftRadius: BORDER_RADIUS * 3,
+                        backgroundColor: theme.colors.bottomSheetBackground
+                    },
+                    draggableIcon: { backgroundColor: theme.colors.black }
+                }}
+                onClose={() => this.props.onClose()}
+            >
+                {this.renderBottomSheetContent()}
+            </RBSheet>
         );
     }
 }

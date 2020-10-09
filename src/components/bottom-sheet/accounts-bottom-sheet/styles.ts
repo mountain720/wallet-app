@@ -16,7 +16,7 @@ export default (theme: ITheme) =>
         scrollContainer: {
             flexGrow: 1,
             backgroundColor: theme.colors.bottomSheetBackground,
-            marginBottom: BASE_DIMENSION * 4
+            marginBottom: BASE_DIMENSION
         },
         icon: {
             color: theme.colors.accent,

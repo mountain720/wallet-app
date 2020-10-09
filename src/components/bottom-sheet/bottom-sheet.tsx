@@ -69,25 +69,17 @@ export class BottomSheetComponent extends React.Component<
         switch (this.props.bottomSheet?.type) {
             case BottomSheetType.ACCOUNTS:
                 return (
-                    <View style={this.props.styles.container}>
-                        <TouchableOpacity
-                            onPress={this.handleClose}
-                            style={this.props.styles.container}
-                            activeOpacity={1}
-                        />
-                        <AccountsBottomSheet
-                            snapPoints={{
-                                initialSnap:
-                                    Platform.OS === 'web' ? HEIGHT_THREE_QUARTERS_SCREEN : 0,
-                                bottomSheetHeight:
-                                    Platform.OS === 'web'
-                                        ? HEIGHT_THREE_QUARTERS_SCREEN
-                                        : ACCOUNT_CARD_HEIGHT * (this.props.accounts.length + 1) +
-                                          ACCOUNT_CARD_MARGINS
-                            }}
-                            onClose={this.handleClose}
-                        />
-                    </View>
+                    <AccountsBottomSheet
+                        snapPoints={{
+                            initialSnap: Platform.OS === 'web' ? HEIGHT_THREE_QUARTERS_SCREEN : 0,
+                            bottomSheetHeight:
+                                Platform.OS === 'web'
+                                    ? HEIGHT_THREE_QUARTERS_SCREEN
+                                    : ACCOUNT_CARD_HEIGHT * (this.props.accounts.length + 1) +
+                                      ACCOUNT_CARD_MARGINS
+                        }}
+                        onClose={this.handleClose}
+                    />
                 );
 
             case BottomSheetType.DASHBOARD_MENU:

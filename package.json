@@ -107,6 +107,7 @@
         "react-native-ntp-client": "^1.0.1",
         "react-native-qrcode-svg": "^6.0.3",
         "react-native-randombytes": "^3.5.3",
+        "react-native-raw-bottom-sheet": "^2.2.0",
         "react-native-reanimated": "^1.7.0",
         "react-native-screens": "^2.0.0-alpha.3",
         "react-native-svg": "^12.1.0",
