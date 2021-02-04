@@ -78,7 +78,10 @@ export class ClientUtils implements IClientUtils {
             broadcastedOnBlock: txInfo.blockNumber,
             nonce: txInfo.nonce,
             status: Celo.transaction.getTransactionStatusByCode(txReceipt.status),
-            token
+            token,
+
+            txBlock: undefined,
+            waitForConfirmation: false
         };
     }
 

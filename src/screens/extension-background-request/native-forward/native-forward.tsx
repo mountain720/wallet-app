@@ -113,6 +113,8 @@ export class NativeForwardComp extends React.Component<
                                 },
 
                                 broadcastedOnBlock: undefined,
+                                txBlock: undefined,
+                                waitForConfirmation: false,
                                 nonce: undefined,
                                 status: TransactionStatus.PENDING
                             };
@@ -164,6 +166,8 @@ export class NativeForwardComp extends React.Component<
                                 },
 
                                 broadcastedOnBlock: undefined,
+                                txBlock: undefined,
+                                waitForConfirmation: false,
                                 nonce: undefined,
                                 status: TransactionStatus.PENDING
                             };
@@ -212,6 +216,8 @@ export class NativeForwardComp extends React.Component<
                                 gasLimit: rpcParams.gasLimit
                             },
                             broadcastedOnBlock: undefined,
+                            txBlock: undefined,
+                            waitForConfirmation: false,
                             nonce: undefined,
                             status: TransactionStatus.PENDING
                         };

@@ -151,7 +151,8 @@ export const config: IBlockchainConfig = {
     defaultOrder: 1,
     amountToKeepInAccount: {
         [AccountType.DEFAULT]: new BigNumber(0)
-    }
+    },
+    numBlocksConfirmed: 1
 };
 
 export enum Contracts {

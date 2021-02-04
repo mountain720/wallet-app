@@ -122,7 +122,9 @@ export class NearTransactionUtils extends AbstractBlockchainTransactionUtils {
                         type: NearTransactionActionType.TRANSFER
                     }
                 ]
-            }
+            },
+            txBlock: undefined,
+            waitForConfirmation: false
         };
     }
 

@@ -296,7 +296,9 @@ export class CeloTransactionUtils extends EthereumTransactionUtils {
                             abi
                                 .simpleEncode('transfer(address,uint256)', tx.toAddress, tx.amount)
                                 .toString('hex')
-                    }
+                    },
+                    txBlock: undefined,
+                    waitForConfirmation: false
                 };
 
             // case TokenType.NATIVE:
@@ -320,7 +322,9 @@ export class CeloTransactionUtils extends EthereumTransactionUtils {
                     feeOptions: tx.feeOptions,
                     broadcastedOnBlock: blockInfo?.number,
                     nonce,
-                    status: TransactionStatus.PENDING
+                    status: TransactionStatus.PENDING,
+                    txBlock: undefined,
+                    waitForConfirmation: false
                 };
         }
     }

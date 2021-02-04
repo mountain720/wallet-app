@@ -210,7 +210,8 @@ export const config: IBlockchainConfig = {
     ],
     amountToKeepInAccount: {
         [AccountType.DEFAULT]: new BigNumber(10).pow(13).multipliedBy(3) // 30 ZIL
-    }
+    },
+    numBlocksConfirmed: 1
 };
 
 export enum Contracts {

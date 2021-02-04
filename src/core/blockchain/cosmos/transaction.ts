@@ -118,7 +118,9 @@ export class CosmosTransactionUtils extends AbstractBlockchainTransactionUtils {
                 account_number: accountInfo.account_number,
                 memo: tx.extraFields.memo,
                 stdSignMsg
-            }
+            },
+            txBlock: undefined,
+            waitForConfirmation: false
         };
     }
 

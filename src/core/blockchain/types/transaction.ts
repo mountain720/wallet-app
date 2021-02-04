@@ -61,9 +61,11 @@ export interface IBlockchainTransaction<IAdditionalInfoType = any> {
     code?: string;
     feeOptions: IFeeOptions;
     broadcastedOnBlock: number;
+    txBlock: number;
     nonce: number;
     status: TransactionStatus;
     additionalInfo?: IAdditionalInfoType;
+    waitForConfirmation: boolean;
 }
 
 export enum TransactionType {

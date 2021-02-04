@@ -81,7 +81,9 @@ export class ClientUtils implements IClientUtils {
                 broadcastedOnBlock: txData.receipt?.epoch_num,
                 nonce: txData.nonce,
                 status: this.getTransactionStatus(txData, token),
-                token
+                token,
+                txBlock: undefined,
+                waitForConfirmation: false
             };
         } catch (err) {
             return Promise.reject(err);

@@ -39,7 +39,9 @@ export class ClientUtils implements IClientUtils {
             broadcastedOnBlock: undefined, // TODO: use txData.receipts_outcome.block_hash
             status: Near.transaction.getTransactionStatusByCode(txData.status),
             token: getTokenConfig(Blockchain.NEAR, 'NEAR'),
-            nonce: txData.transaction.nonce
+            nonce: txData.transaction.nonce,
+            txBlock: undefined,
+            waitForConfirmation: false
         };
 
         for (const action of txData.transaction.actions) {

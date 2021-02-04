@@ -81,7 +81,10 @@ export class ClientUtils implements IClientUtils {
             broadcastedOnBlock: txInfo.blockNumber,
             nonce: txInfo.nonce,
             status: Ethereum.transaction.getTransactionStatusByCode(txReceipt.status),
-            token
+            token,
+
+            txBlock: undefined,
+            waitForConfirmation: false
         };
     }
 

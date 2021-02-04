@@ -135,5 +135,6 @@ export const config: IBlockchainConfig = {
     amountToKeepInAccount: {
         [AccountType.DEFAULT]: new BigNumber(0),
         [AccountType.LOCKUP_CONTRACT]: new BigNumber(10).pow(24).multipliedBy(40) // 40 NEAR
-    }
+    },
+    numBlocksConfirmed: 1
 };

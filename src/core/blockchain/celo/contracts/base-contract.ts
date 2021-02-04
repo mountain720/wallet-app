@@ -65,6 +65,8 @@ export const buildBaseTransaction = async (
         nonce,
         status: TransactionStatus.PENDING,
         data: {},
-        additionalInfo: tx.extraFields
+        additionalInfo: tx.extraFields,
+        txBlock: undefined,
+        waitForConfirmation: false
     };
 };

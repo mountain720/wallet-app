@@ -36,6 +36,8 @@ export const buildBaseTransaction = async (
         additionalInfo: {
             ...tx.extraFields,
             currentBlockHash: blockInfo.hash
-        }
+        },
+        txBlock: undefined,
+        waitForConfirmation: false
     };
 };

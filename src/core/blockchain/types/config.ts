@@ -108,4 +108,5 @@ export interface IBlockchainConfig {
     amountToKeepInAccount: {
         [accountType: string]: BigNumber;
     };
+    numBlocksConfirmed: number;
 }
