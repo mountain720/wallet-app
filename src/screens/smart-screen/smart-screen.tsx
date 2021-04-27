@@ -41,9 +41,12 @@ interface INavigationParams {
         color?: string;
         gradient?: string[];
     };
-    newFlow?: boolean;
+
     extraParams?: any;
+
+    newFlow?: boolean;
     resetScreen?: boolean;
+    alwaysShowLoading?: boolean;
 }
 
 const mapStateToProps = (state: IReduxState, ownProps: INavigationParams) => {
@@ -141,9 +144,26 @@ class SmartScreenComponent extends React.Component<
                 navigationOptions: this.props.navigationOptions
             });
 
-        this.props.fetchScreenData(this.state.context);
-
         this.subscribePubSubEvents();
+
+        if (this.props?.alwaysShowLoading === true) {
+            // Start loading
+            this.setState(
+                {
+                    loadingScreenData: true,
+                    loadingTimeoutInProgress: true
+                },
+                () => {
+                    // Start loading screen timemout
+                    this.startLoadingTimeout();
+                    // Fetch screen data
+                    this.props.fetchScreenData(this.state.context);
+                }
+            );
+        } else {
+            // Fetch screen data
+            this.props.fetchScreenData(this.state.context);
+        }
     }
 
     private subscribePubSubEvents() {

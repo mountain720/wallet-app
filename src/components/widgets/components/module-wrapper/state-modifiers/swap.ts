@@ -42,13 +42,14 @@ export const swapToEnterAmount = (
 ): string => {
     const wrapper = module.data as IScreenModuleWrapperData;
 
-    if (
-        screenKey &&
-        state.ui.screens.inputData &&
-        state.ui.screens.inputData[screenKey] &&
-        state.ui.screens.inputData[screenKey]?.validation &&
-        state.ui.screens.inputData[screenKey]?.validation?.valid === true
-    ) {
+    const screenData =
+        screenKey && state.ui.screens.inputData && state.ui.screens.inputData[screenKey];
+
+    if (screenData && screenData?.validation && screenData?.validation?.valid === true) {
+        if (screenData.data?.fetchPriceUpdateInProgress === true) {
+            return wrapper.state;
+        }
+
         return 'DEFAULT';
     }
 
