@@ -21,13 +21,13 @@ export class SolanaAccountUtils implements IBlockchainAccountUtils {
     }
 
     public isValidChecksumAddress(address: string): boolean {
-        // return address.length === 44;
-        return true;
+        const decoded = bs58Decode(address);
+        return decoded.length === 32;
     }
 
     public isValidAddress(address: string): boolean {
-        // return address.length === 44;
-        return true;
+        const decoded = bs58Decode(address);
+        return decoded.length === 32;
     }
 
     public publicToAddress(publicKey: string): string {
